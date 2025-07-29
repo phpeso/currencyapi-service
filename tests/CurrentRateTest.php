@@ -10,6 +10,7 @@ use Peso\Core\Requests\CurrentExchangeRateRequest;
 use Peso\Core\Responses\ErrorResponse;
 use Peso\Core\Responses\ExchangeRateResponse;
 use Peso\Services\CurrencyApiService;
+use Peso\Services\CurrencyApiService\Subscription;
 use Peso\Services\Tests\Helpers\MockClient;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -22,7 +23,7 @@ final class CurrentRateTest extends TestCase
         $cache = new Psr16Cache(new ArrayAdapter());
         $http = MockClient::get();
 
-        $service = new CurrencyApiService('xxxfreexxx', cache: $cache, httpClient: $http);
+        $service = new CurrencyApiService('xxxfreexxx', Subscription::Free, cache: $cache, httpClient: $http);
         $today = Calendar::parse('2025-07-28');
 
         $response = $service->send(new CurrentExchangeRateRequest('EUR', 'USD'));
@@ -53,7 +54,7 @@ final class CurrentRateTest extends TestCase
         $cache = new Psr16Cache(new ArrayAdapter());
         $http = MockClient::get();
 
-        $service = new CurrencyApiService('xxxfreexxx', symbols: [
+        $service = new CurrencyApiService('xxxfreexxx', Subscription::Free, symbols: [
             'EUR', 'USD',
         ], cache: $cache, httpClient: $http);
         $today = Calendar::parse('2025-07-28');
@@ -86,7 +87,7 @@ final class CurrentRateTest extends TestCase
         $cache = new Psr16Cache(new ArrayAdapter());
         $http = MockClient::get();
 
-        $service = new CurrencyApiService('xxxfreexxx', cache: $cache, httpClient: $http);
+        $service = new CurrencyApiService('xxxfreexxx', Subscription::Free, cache: $cache, httpClient: $http);
 
         $response = $service->send(new CurrentExchangeRateRequest('XBT', 'USD'));
         self::assertInstanceOf(ErrorResponse::class, $response);

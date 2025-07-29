@@ -11,6 +11,7 @@ use Peso\Core\Requests\HistoricalConversionRequest;
 use Peso\Core\Requests\HistoricalExchangeRateRequest;
 use Peso\Core\Types\Decimal;
 use Peso\Services\CurrencyApiService;
+use Peso\Services\CurrencyApiService\Subscription;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -18,7 +19,7 @@ final class SupportTest extends TestCase
 {
     public function testRequests(): void
     {
-        $service = new CurrencyApiService('xxxfreexxx');
+        $service = new CurrencyApiService('xxxfreexxx', Subscription::Free);
 
         self::assertTrue($service->supports(new CurrentExchangeRateRequest('EUR', 'USD')));
         self::assertTrue($service->supports(new HistoricalExchangeRateRequest('EUR', 'USD', Date::today())));

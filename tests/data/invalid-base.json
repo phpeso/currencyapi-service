@@ -1,0 +1,1 @@
+{"message":"Validation error","errors":{"base_currency":["The selected base currency is invalid."]},"info":"For more information, see documentation: https:\/\/currencyapi.com\/docs\/status-codes#_422"}
