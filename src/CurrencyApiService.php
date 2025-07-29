@@ -33,7 +33,7 @@ final readonly class CurrencyApiService implements PesoServiceInterface
 
     public function __construct(
         private string $apiKey,
-        private Subscription $subscription = Subscription::Free,
+        private Subscription $subscription,
         private array|null $symbols = null,
         private CacheInterface $cache = new NullCache(),
         private DateInterval $ttl = new DateInterval('PT1H'),
