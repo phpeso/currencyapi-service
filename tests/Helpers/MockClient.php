@@ -57,25 +57,25 @@ final readonly class MockClient
             static function (RequestInterface $request) {
                 $query = $request->getUri()->getQuery();
                 switch ($query) {
-                    case 'apikey=xxxfreexxx&date=2025-06-13&base_currency=EUR':
+                    case 'apikey=xxxfreexxx&base_currency=EUR&date=2025-06-13':
                         return new Response(body: fopen(__DIR__ . '/../data/2025-06-13-EUR.json', 'r'));
 
-                    case 'apikey=xxxfreexxx&date=2025-06-13&base_currency=USD':
+                    case 'apikey=xxxfreexxx&base_currency=USD&date=2025-06-13':
                         return new Response(body: fopen(__DIR__ . '/../data/2025-06-13-USD.json', 'r'));
 
-                    case 'apikey=xxxfreexxx&date=2025-06-13&base_currency=RUB':
+                    case 'apikey=xxxfreexxx&base_currency=RUB&date=2025-06-13':
                         return new Response(body: fopen(__DIR__ . '/../data/2025-06-13-RUB.json', 'r'));
 
-                    case 'apikey=xxxfreexxx&date=2025-06-13&base_currency=EUR&currencies=EUR%2CUSD':
+                    case 'apikey=xxxfreexxx&base_currency=EUR&currencies=EUR%2CUSD&date=2025-06-13':
                         return new Response(body: fopen(__DIR__ . '/../data/2025-06-13-EUR-EUR,USD.json', 'r'));
 
-                    case 'apikey=xxxfreexxx&date=2025-06-13&base_currency=USD&currencies=EUR%2CUSD':
+                    case 'apikey=xxxfreexxx&base_currency=USD&currencies=EUR%2CUSD&date=2025-06-13':
                         return new Response(body: fopen(__DIR__ . '/../data/2025-06-13-USD-EUR,USD.json', 'r'));
 
-                    case 'apikey=xxxfreexxx&date=2025-06-13&base_currency=RUB&currencies=EUR%2CUSD':
+                    case 'apikey=xxxfreexxx&base_currency=RUB&currencies=EUR%2CUSD&date=2025-06-13':
                         return new Response(body: fopen(__DIR__ . '/../data/2025-06-13-RUB-EUR,USD.json', 'r'));
 
-                    case 'apikey=xxxfreexxx&date=2025-06-13&base_currency=XBT':
+                    case 'apikey=xxxfreexxx&base_currency=XBT&date=2025-06-13':
                         return new Response(422, body: fopen(__DIR__ . '/../data/invalid-base.json', 'r'));
 
                     default:
