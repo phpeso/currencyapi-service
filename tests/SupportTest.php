@@ -17,7 +17,7 @@ use stdClass;
 
 final class SupportTest extends TestCase
 {
-    public function testRequests(): void
+    public function testSupportsFree(): void
     {
         $service = new CurrencyApiService('xxxfreexxx', Subscription::Free);
 
@@ -30,6 +30,25 @@ final class SupportTest extends TestCase
             new CurrentConversionRequest(new Decimal('1000'), 'USD', 'EUR'),
         ));
         self::assertFalse($service->supports(
+            new HistoricalConversionRequest(new Decimal('1000'), 'USD', 'EUR', Date::today()),
+        ));
+
+        self::assertFalse($service->supports(new stdClass()));
+    }
+
+    public function testSupportsPaid(): void
+    {
+        $service = new CurrencyApiService('xxxpaidxxx', Subscription::Paid);
+
+        self::assertTrue($service->supports(new CurrentExchangeRateRequest('EUR', 'USD')));
+        self::assertTrue($service->supports(new HistoricalExchangeRateRequest('EUR', 'USD', Date::today())));
+        self::assertTrue($service->supports(new CurrentExchangeRateRequest('USD', 'EUR')));
+        self::assertTrue($service->supports(new HistoricalExchangeRateRequest('USD', 'EUR', Date::today())));
+
+        self::assertTrue($service->supports(
+            new CurrentConversionRequest(new Decimal('1000'), 'USD', 'EUR'),
+        ));
+        self::assertTrue($service->supports(
             new HistoricalConversionRequest(new Decimal('1000'), 'USD', 'EUR', Date::today()),
         ));
 

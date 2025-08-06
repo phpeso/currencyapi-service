@@ -83,6 +83,25 @@ final readonly class MockClient
                 }
             },
         );
+        $client->on(
+            new RequestMatcher('/v3/convert', 'api.currencyapi.com', ['GET'], ['https']),
+            static function (RequestInterface $request) {
+                $query = $request->getUri()->getQuery();
+                switch ($query) {
+                    case 'apikey=xxxpaidxxx&base_currency=EUR&value=1234.56&currencies=USD':
+                        return new Response(body: fopen(__DIR__ . '/../data/conv/latest-EUR-USD.json', 'r'));
+
+                    case 'apikey=xxxpaidxxx&base_currency=USD&value=1234.56&currencies=RUB':
+                        return new Response(body: fopen(__DIR__ . '/../data/conv/latest-USD-RUB.json', 'r'));
+
+                    case 'apikey=xxxpaidxxx&base_currency=RUB&value=1234.56&currencies=PHP':
+                        return new Response(body: fopen(__DIR__ . '/../data/conv/latest-RUB-PHP.json', 'r'));
+
+                    default:
+                        throw new \LogicException('Non-mocked query: ' . $query);
+                }
+            },
+        );
 
         return $client;
     }

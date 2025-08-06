@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Peso\Services\Tests;
 
+use ArrayObject;
 use Peso\Core\Exceptions\RequestNotSupportedException;
 use Peso\Core\Requests\CurrentConversionRequest;
 use Peso\Core\Requests\CurrentExchangeRateRequest;
@@ -26,6 +27,19 @@ final class EdgeCasesTest extends TestCase
         self::assertInstanceOf(RequestNotSupportedException::class, $response->exception);
         self::assertEquals(
             'Unsupported request type: "Peso\Core\Requests\CurrentConversionRequest"',
+            $response->exception->getMessage(),
+        );
+    }
+
+    public function testInvalidObject(): void
+    {
+        $service = new CurrencyApiService('xxx', Subscription::Free);
+
+        $response = $service->send(new ArrayObject());
+        self::assertInstanceOf(ErrorResponse::class, $response);
+        self::assertInstanceOf(RequestNotSupportedException::class, $response->exception);
+        self::assertEquals(
+            'Unsupported request type: "ArrayObject"',
             $response->exception->getMessage(),
         );
     }
