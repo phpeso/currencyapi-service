@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Peso\Services\Tests;
 
-use Arokettu\Date\Calendar;
 use Peso\Core\Requests\CurrentConversionRequest;
 use Peso\Core\Responses\ConversionResponse;
 use Peso\Core\Types\Decimal;
@@ -15,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Psr16Cache;
 
-final class ConversionTest extends TestCase
+final class CurrentConversionTest extends TestCase
 {
     public function testCurrentConv(): void
     {
