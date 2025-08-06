@@ -44,4 +44,61 @@ final class CurrentConversionTest extends TestCase
         self::assertEquals('882.2607894103', $response->amount->value);
         self::assertEquals('2025-08-06', $response->date->toString());
     }
+
+    public function testCurrentMulticonv(): void
+    {
+        $cache = new Psr16Cache(new ArrayAdapter());
+        $http = MockClient::get();
+
+        $service = new CurrencyApiService(
+            'xxxpaidxxx',
+            Subscription::Paid,
+            multiconversion: true,
+            cache: $cache,
+            httpClient: $http,
+        );
+
+        $response = $service->send(
+            new CurrentConversionRequest(Decimal::init('1234.56'), 'EUR', 'USD'),
+        );
+        self::assertInstanceOf(ConversionResponse::class, $response);
+        self::assertEquals('1434.7839204863', $response->amount->value);
+        self::assertEquals('2025-08-06', $response->date->toString());
+
+        $response = $service->send(
+            new CurrentConversionRequest(Decimal::init('1234.56'), 'EUR', 'JPY'),
+        );
+        self::assertInstanceOf(ConversionResponse::class, $response);
+        self::assertEquals('211542.00671481', $response->amount->value);
+        self::assertEquals('2025-08-06', $response->date->toString());
+
+        $response = $service->send(
+            new CurrentConversionRequest(Decimal::init('1234.56'), 'EUR', 'PHP'),
+        );
+        self::assertInstanceOf(ConversionResponse::class, $response);
+        self::assertEquals('82298.059629799', $response->amount->value);
+        self::assertEquals('2025-08-06', $response->date->toString());
+
+        self::assertCount(1, $http->getRequests());
+
+        // different amount
+
+        $response = $service->send(
+            new CurrentConversionRequest(Decimal::init('12.3456'), 'EUR', 'USD'),
+        );
+        self::assertInstanceOf(ConversionResponse::class, $response);
+        self::assertEquals('14.3478392049', $response->amount->value);
+        self::assertEquals('2025-08-06', $response->date->toString());
+
+        // different currency
+
+        $response = $service->send(
+            new CurrentConversionRequest(Decimal::init('1234.56'), 'USD', 'EUR'),
+        );
+        self::assertInstanceOf(ConversionResponse::class, $response);
+        self::assertEquals('1062.2773031101', $response->amount->value);
+        self::assertEquals('2025-08-06', $response->date->toString());
+
+        self::assertCount(3, $http->getRequests());
+    }
 }
