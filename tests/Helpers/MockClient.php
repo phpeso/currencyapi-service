@@ -106,6 +106,9 @@ final readonly class MockClient
                     case 'apikey=xxxpaidxxx&base_currency=USD&value=1234.56':
                         return new Response(body: fopen(__DIR__ . '/../data/conv/latest-USD.json', 'r'));
 
+                    case 'apikey=xxxpaidxxx&base_currency=EUR&value=1234.56&currencies=USD%2CJPY%2CPHP%2CBYN':
+                        return new Response(body: fopen(__DIR__ . '/../data/conv/latest-EUR-USD,JPY,PHP,BYN.json', 'r'));
+
                     default:
                         throw new \LogicException('Non-mocked query: ' . $query);
                 }
