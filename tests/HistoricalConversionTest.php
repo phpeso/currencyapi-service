@@ -145,4 +145,30 @@ final class HistoricalConversionTest extends TestCase
 
         self::assertCount(1, $http->getRequests());
     }
+
+    public function testInvalidBaseCurrency(): void
+    {
+        $cache = new Psr16Cache(new ArrayAdapter());
+        $http = MockClient::get();
+
+        $service = new CurrencyApiService('xxxpaidxxx', Subscription::Paid, cache: $cache, httpClient: $http);
+
+        $response = $service->send(new HistoricalConversionRequest(Decimal::init(1), 'XBT', 'USD', Calendar::parse('2025-06-13')));
+        self::assertInstanceOf(ErrorResponse::class, $response);
+        self::assertInstanceOf(ConversionNotPerformedException::class, $response->exception);
+        self::assertEquals('Unable to convert 1 XBT to USD on 2025-06-13', $response->exception->getMessage());
+    }
+
+    public function testInvalidQuoteCurrency(): void
+    {
+        $cache = new Psr16Cache(new ArrayAdapter());
+        $http = MockClient::get();
+
+        $service = new CurrencyApiService('xxxpaidxxx', Subscription::Paid, cache: $cache, httpClient: $http);
+
+        $response = $service->send(new HistoricalConversionRequest(Decimal::init(1), 'USD', 'XBT', Calendar::parse('2025-06-13')));
+        self::assertInstanceOf(ErrorResponse::class, $response);
+        self::assertInstanceOf(ConversionNotPerformedException::class, $response->exception);
+        self::assertEquals('Unable to convert 1 USD to XBT on 2025-06-13', $response->exception->getMessage());
+    }
 }

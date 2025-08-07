@@ -141,4 +141,30 @@ final class CurrentConversionTest extends TestCase
 
         self::assertCount(1, $http->getRequests());
     }
+
+    public function testInvalidBaseCurrency(): void
+    {
+        $cache = new Psr16Cache(new ArrayAdapter());
+        $http = MockClient::get();
+
+        $service = new CurrencyApiService('xxxpaidxxx', Subscription::Paid, cache: $cache, httpClient: $http);
+
+        $response = $service->send(new CurrentConversionRequest(Decimal::init(1), 'XBT', 'USD'));
+        self::assertInstanceOf(ErrorResponse::class, $response);
+        self::assertInstanceOf(ConversionNotPerformedException::class, $response->exception);
+        self::assertEquals('Unable to convert 1 XBT to USD', $response->exception->getMessage());
+    }
+
+    public function testInvalidQuoteCurrency(): void
+    {
+        $cache = new Psr16Cache(new ArrayAdapter());
+        $http = MockClient::get();
+
+        $service = new CurrencyApiService('xxxpaidxxx', Subscription::Paid, cache: $cache, httpClient: $http);
+
+        $response = $service->send(new CurrentConversionRequest(Decimal::init(1), 'USD', 'XBT'));
+        self::assertInstanceOf(ErrorResponse::class, $response);
+        self::assertInstanceOf(ConversionNotPerformedException::class, $response->exception);
+        self::assertEquals('Unable to convert 1 USD to XBT', $response->exception->getMessage());
+    }
 }

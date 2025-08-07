@@ -38,14 +38,11 @@ final readonly class MockClient
                     case 'apikey=xxxfreexxx&base_currency=RUB&currencies=EUR%2CUSD':
                         return new Response(body: fopen(__DIR__ . '/../data/rates/latest-RUB-EUR,USD.json', 'r'));
 
-                    case 'apikey=rate_exceeded&base_currency=TRY':
-                        return new Response(429, body: fopen(__DIR__ . '/../data/rate-limit.json', 'r'));
-
                     case 'apikey=invalid&base_currency=TRY':
                         return new Response(401, body: fopen(__DIR__ . '/../data/invalid-key.json', 'r'));
 
                     case 'apikey=xxxfreexxx&base_currency=XBT':
-                        return new Response(422, body: fopen(__DIR__ . '/../data/invalid-base.json', 'r'));
+                        return new Response(422, body: fopen(__DIR__ . '/../data/rates/invalid-base.json', 'r'));
 
                     default:
                         throw new \LogicException('Non-mocked query: ' . $query);
@@ -76,7 +73,7 @@ final readonly class MockClient
                         return new Response(body: fopen(__DIR__ . '/../data/rates/2025-06-13-RUB-EUR,USD.json', 'r'));
 
                     case 'apikey=xxxfreexxx&base_currency=XBT&date=2025-06-13':
-                        return new Response(422, body: fopen(__DIR__ . '/../data/invalid-base.json', 'r'));
+                        return new Response(422, body: fopen(__DIR__ . '/../data/rates/invalid-base.json', 'r'));
 
                     default:
                         throw new \LogicException('Non-mocked query: ' . $query);
@@ -134,6 +131,20 @@ final readonly class MockClient
 
                     case 'apikey=xxxpaidxxx&base_currency=RUB&value=1234.56&currencies=PHP&date=2025-06-13':
                         return new Response(body: fopen(__DIR__ . '/../data/conv/2025-06-13-RUB-PHP.json', 'r'));
+
+                    case 'apikey=xxxpaidxxx&base_currency=XBT&value=1&currencies=USD':
+                    case 'apikey=xxxpaidxxx&base_currency=XBT&value=1&currencies=USD&date=2025-06-13':
+                        return new Response(
+                            status: 422,
+                            body: fopen(__DIR__ . '/../data/conv/invalid-base.json', 'r'),
+                        );
+
+                    case 'apikey=xxxpaidxxx&base_currency=USD&value=1&currencies=XBT':
+                    case 'apikey=xxxpaidxxx&base_currency=USD&value=1&currencies=XBT&date=2025-06-13':
+                        return new Response(
+                            status: 422,
+                            body: fopen(__DIR__ . '/../data/conv/invalid-quote.json', 'r'),
+                        );
 
                     default:
                         throw new \LogicException('Non-mocked query: ' . $query);
