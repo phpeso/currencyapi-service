@@ -107,7 +107,33 @@ final readonly class MockClient
                         return new Response(body: fopen(__DIR__ . '/../data/conv/latest-USD.json', 'r'));
 
                     case 'apikey=xxxpaidxxx&base_currency=EUR&value=1234.56&currencies=USD%2CJPY%2CPHP%2CBYN':
-                        return new Response(body: fopen(__DIR__ . '/../data/conv/latest-EUR-USD,JPY,PHP,BYN.json', 'r'));
+                        return new Response(
+                            body: fopen(__DIR__ . '/../data/conv/latest-EUR-USD,JPY,PHP,BYN.json', 'r'),
+                        );
+
+                    case 'apikey=xxxpaidxxx&base_currency=EUR&value=1234.56&' .
+                        'currencies=USD%2CJPY%2CPHP%2CBYN&date=2025-06-13':
+                        return new Response(
+                            body: fopen(__DIR__ . '/../data/conv/2025-06-13-EUR-USD,JPY,PHP,BYN.json', 'r'),
+                        );
+
+                    case 'apikey=xxxpaidxxx&base_currency=EUR&value=1234.56&date=2025-06-13':
+                        return new Response(body: fopen(__DIR__ . '/../data/conv/2025-06-13-EUR.json', 'r'));
+
+                    case 'apikey=xxxpaidxxx&base_currency=EUR&value=12.3456&date=2025-06-13':
+                        return new Response(body: fopen(__DIR__ . '/../data/conv/2025-06-13-EUR-small.json', 'r'));
+
+                    case 'apikey=xxxpaidxxx&base_currency=EUR&value=1234.56&currencies=USD&date=2025-06-13':
+                        return new Response(body: fopen(__DIR__ . '/../data/conv/2025-06-13-EUR-USD.json', 'r'));
+
+                    case 'apikey=xxxpaidxxx&base_currency=USD&value=1234.56&date=2025-06-13':
+                        return new Response(body: fopen(__DIR__ . '/../data/conv/2025-06-13-USD.json', 'r'));
+
+                    case 'apikey=xxxpaidxxx&base_currency=USD&value=1234.56&currencies=RUB&date=2025-06-13':
+                        return new Response(body: fopen(__DIR__ . '/../data/conv/2025-06-13-USD-RUB.json', 'r'));
+
+                    case 'apikey=xxxpaidxxx&base_currency=RUB&value=1234.56&currencies=PHP&date=2025-06-13':
+                        return new Response(body: fopen(__DIR__ . '/../data/conv/2025-06-13-RUB-PHP.json', 'r'));
 
                     default:
                         throw new \LogicException('Non-mocked query: ' . $query);
